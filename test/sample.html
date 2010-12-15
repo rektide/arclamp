@@ -1,0 +1,20 @@
+<html>
+<head>
+	<title>jssaxparser console logger ouput</title>
+	<script type="text/javascript" src="../lib/jssaxparser/jssaxparser/sax.js"></script>
+	<script type="text/javascript" src="../lib/jssaxparser/jssaxparser/DefaultHandlers.js"></script>
+	<script type="text/javascript" src="../lib/jssaxparser/jssaxparser/AttributesImpl.js"></script>
+	<script type="text/javascript" src="../lib/jssaxparser/jssaxparser/NamespaceSupport.js"></script>
+	<script type="text/javascript" src="../lib/jssaxparser/jssaxparser/XMLFilterImpls.js"></script>
+	<script type="text/javascript" src="../lib/jssaxparser/jssaxparser/SAXScanner.js"></script>
+	<script type="text/javascript" src="../src/arclamp.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+var demo = arclamp("<root xmlns='yoyodyne/y' xmlns:y='yoyodyne/y' xmlns:v='voodoowarez.com/schema/v'><!-- comment one --><child><v:grand><!-- comment two --><e:distant xmlns:e='eldergods.com/schema/e'/><distant xmlns:e='eldergods.com/schema/e' defTag='defValue' v:tag='tagValue'>content</distant></v:grand></child></root>")
+console.log("done",demo)
+</script>
+
+</body>
+</html>
