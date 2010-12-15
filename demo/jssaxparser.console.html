@@ -87,7 +87,7 @@ jssaxparserConsoleDemo.prototype.parse = function() {
 </script>
 
 <script type="text/javascript">
-var demo = jssaxparserConsoleDemo("<root xmlns='yoyodyne/y' xmlns:y='yoyodyne/y' xmlns:v='voodoowarez.com/schema/v'><child><v:grand><e:distant xmlns:e='eldergods.com/schema/e'/><e:distant xmlns:e='eldergods.com/schema/e'/></v:grand></child></root>")
+var demo = jssaxparserConsoleDemo("<root xmlns='yoyodyne/y' xmlns:y='yoyodyne/y' xmlns:v='voodoowarez.com/schema/v'><child><v:grand><e:distant xmlns:e='eldergods.com/schema/e'/><e:distant xmlns:e='eldergods.com/schema/e' v:tag='tagValue'>content</e:distant></v:grand></child></root>")
 demo.parse()
 </script>
 
