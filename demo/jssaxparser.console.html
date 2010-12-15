@@ -1,0 +1,95 @@
+<html>
+<head>
+	<title>jssaxparser console logger ouput</title>
+	<script type="text/javascript" src="../lib/jssaxparser/jssaxparser/sax.js"></script>
+	<script type="text/javascript" src="../lib/jssaxparser/jssaxparser/DefaultHandlers.js"></script>
+	<script type="text/javascript" src="../lib/jssaxparser/jssaxparser/AttributesImpl.js"></script>
+	<script type="text/javascript" src="../lib/jssaxparser/jssaxparser/NamespaceSupport.js"></script>
+	<script type="text/javascript" src="../lib/jssaxparser/jssaxparser/XMLFilterImpls.js"></script>
+	<script type="text/javascript" src="../lib/jssaxparser/jssaxparser/SAXScanner.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+// script demos how to use jssaxparser
+
+var jssaxparserConsoleDemo = function(doc) {
+	if(!(this instanceof jssaxparserConsoleDemo))
+		return new jssaxparserConsoleDemo(doc)
+	this.root = {} // ackmark builds this object
+	this.doc = doc // document to parse
+	this.defaultHandler2 = new DefaultHandler2() // sax parser
+	this.saxXmlReader = XMLReaderFactory.createXMLReader()
+	this.wire() // connect sax parser to handlers
+	this.resetBetweenParses = false
+	this.namespaceStack = []
+	return this
+}
+
+jssaxparserConsoleDemo.prototype._makeHandler = function(name) {
+	var handler = this.__proto__[name] = function() {
+		console.log(arguments,this,name)
+	}
+	this.defaultHandler2[name] = handler
+}
+
+jssaxparserConsoleDemo.prototype.wire = function() {
+	// ContentHandler
+	this._makeHandler('characters')
+	this._makeHandler('endDocument')
+	this._makeHandler('endElement')
+	this._makeHandler('endPrefixMapping')
+	this._makeHandler('ignorableWhitespace')
+	this._makeHandler('processingInstruction')
+	this._makeHandler('skippedEntity')
+	this._makeHandler('startDocument')
+	this._makeHandler('startElement')
+	this._makeHandler('startPrefixMapping')
+
+	// DeclHandler
+	this._makeHandler('attributeDecl')
+	this._makeHandler('elementDecl')
+	this._makeHandler('externalEntityDecl')
+	this._makeHandler('internalEntityDecl')
+
+	// DTDHandler
+	this._makeHandler('notationDecl')
+	this._makeHandler('unparsedEntityDecl')
+
+	// EntityResolver
+	this._makeHandler('resolveEntity')
+
+	// EntityResolver2
+	this._makeHandler('getExternalSubset')
+	this._makeHandler('resolveEntity')
+
+	// ErrorHandler
+	this._makeHandler('error')
+	this._makeHandler('fatalError')
+	this._makeHandler('warning')
+
+	// LexicalHandler
+	this._makeHandler('comment')
+	this._makeHandler('endCDATA')
+	this._makeHandler('endDTD')
+	this._makeHandler('endEntity')
+	this._makeHandler('startCDATA')
+	this._makeHandler('startDTD')
+	this._makeHandler('startEntity')
+	
+	// load
+	this.saxXmlReader.setHandler(this.defaultHandler2)
+}
+
+jssaxparserConsoleDemo.prototype.parse = function() {
+	this.saxXmlReader.parseString(this.doc)	
+}
+</script>
+
+<script type="text/javascript">
+var demo = jssaxparserConsoleDemo("<root xmlns='yoyodyne/y' xmlns:y='yoyodyne/y' xmlns:v='voodoowarez.com/schema/v'><child><v:grand><e:distant xmlns:e='eldergods.com/schema/e'/><e:distant xmlns:e='eldergods.com/schema/e'/></v:grand></child></root>")
+demo.parse()
+</script>
+
+</body>
+</html>
