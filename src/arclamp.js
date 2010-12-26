@@ -125,26 +125,18 @@ var arclamp = (this.exports||(exports = {})).arclamp = function(doc) {
 	*/
 	this.__proto__.startElement = function(uri,localName,qName,attributes) {
 		self.log(arguments,self,"startElement")
-		// build element & attach to tree
-		var cur = self.topStack(),
-		  neo = cur[localName] = {};
-		// decorate namespace
-		var i = qName.indexOf(":"),
-		  prefix = qName.substring(0,i),
-		  ns = self.prefixes[prefix]
-		neo.namespace = ns
-		// decorate attributes
-		var atts = {}
-		for(var j = 0; j < attributes.attsArray.length; ++j) {
-			var orig = attributes.attsArray[j],
-			  k = orig.qName.indexOf(":"),
-			  prefix = orig.qName.substring(0,k),
-			  ns = self.prefixes[prefix],
-			  att = {namespace:ns,value:orig.value,name:orig.localName};
-			(neo.attributes||(neo.attributes = {}))[orig.localName] = att
-		}
+		// get a safe name for this element, and build it on it's parent.
+		var parent = self.topStack(),
+		  name = self.buildSafeName(localName,parent),
+		  cur = self.buildElement(uri,localName,qName,attributes,name,parent)
 		// descend into
-		self.stack.push(neo)
+		self.stack.push(cur)
+		// decorate attributes
+		for(var j = 0; j < attributes.attsArray.length; ++j) {
+			var att = attributes.attsArray[j],
+			   name = self.buildSafeName(att.localName,cur)
+			self.buildAttribute(att,name,cur)
+		}
 	}
 	/**
 	  pop the element stack
@@ -173,6 +165,9 @@ var arclamp = (this.exports||(exports = {})).arclamp = function(doc) {
 	this.parse() // run sax parser & build root
 	return this.root
 }
+
+// execution functions
+
 /**
   parse the arclamp's document
 */
@@ -190,4 +185,60 @@ arclamp.prototype.wire = function() {
 	this.defaultHandler2.startElement = this.startElement
 	this.defaultHandler2.endElement= this.endElement
 	this.saxXmlReader.setHandler(this.defaultHandler2)
+}
+
+// builder functions
+
+/**
+  builds an element object on to a parent element
+  @param name a non-colliding name to use for this object when building on the parent
+  @param parent the parent object to build on to
+  @returns the new element object
+  @private
+*/
+arclamp.prototype.buildElement = function(uri,localName,qName,attributes,name,parent) {
+	return parent[name] = {namespaces:{"_":this.parseQNameNS(qName)}}
+}
+
+/**
+  builds an attribute object on a parent element, given a computed safe name and the attribute
+  @param att the attribute to convert
+  @param name the name the attribute will use
+  @param el the element to build the attribute on to
+  @returns the new attribute object
+  @private
+*/
+arclamp.prototype.buildAttribute = function(att,name,el) {
+	el.namespaces[name] = this.parseQNameNS(att.qName)
+	return el[name] = att.value
+}
+
+/**
+  build a name on an object
+  @param name a base name
+  @param object the object being added to
+  @returns the base name, permutted to avoid conflicts if any exist
+  @private
+*/
+arclamp.prototype.buildSafeName= function(name,object) {
+	if(!object[name])
+		return name
+	var i = 1,
+	  proposal
+	do {
+		proposal = name+(i++)
+	} while(object[proposal])
+	return proposal
+}
+
+/**
+  retrieves a namespace from a qualified or unqualified qName.  looks at the local index of prefixes, where "" is a special element for the current default namespace.
+  @param a qName, with or without a prefix
+  @returns the namespace of this qName
+  @private
+*/ 
+arclamp.prototype.parseQNameNS = function(qName) {
+	var i = qName.indexOf(":"),
+	  prefix = qName.substring(0,i)
+	return this.prefixes[prefix]
 }
