@@ -74,6 +74,7 @@ var arclamp = (this.exports||(exports = {})).arclamp = function(doc) {
 	var self = this
 
 	// utility functions
+
 	/**
 	  get the top element from an array
 	  @private
@@ -91,7 +92,7 @@ var arclamp = (this.exports||(exports = {})).arclamp = function(doc) {
 	*/
 	this.topNamespace = function() { return top(self.defaultNamespaces) }
 
-	// sax functions
+	// sax event handlers
 
 	/**
 	  capture prefixes in the prefix map, and the default namespaces if appropriate.
@@ -165,6 +166,8 @@ var arclamp = (this.exports||(exports = {})).arclamp = function(doc) {
 	this.__proto__.comment = function(ch,start,length) {
 		// nop
 	}
+
+	// run
 
 	this.wire() // connect sax parser to handlers
 	this.parse() // run sax parser & build root
