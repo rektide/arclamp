@@ -1,15 +1,15 @@
 /**
- * @name arclamp
+ * @name qjsonml
  * @description xml to json converter, based on JsonML, but element names are qualified, according to an optional namespace map, a blind copy scheme, or by default having the entire namespace injected whole as a prefix.  sax based to permit handling of very large documents.
  * @returns JSON rasterized xml document
  * @param doc input xml string to parse into json
  * @author <a href="http://voodoowarez.com/rektide">rektide</a> &lt;<a href="mailto:rektide@voodoowarez.com">rektide@voodoowarez.com</a>&gt;
  */
-var arclamp = (this.exports||(exports = {})).arclamp = function(doc,nsMap) {
+var qjsonmlReader = (this.exports||(exports = {})).QJsonMLReader = function(doc,nsMap) {
 	// insure context
 
-	if(!(this instanceof arclamp))
-		return new arclamp(doc)
+	if(!(this instanceof qjsonmlReader))
+		return new qjsonmlReader(doc)
 
 	// parsing members
 
@@ -56,7 +56,7 @@ var arclamp = (this.exports||(exports = {})).arclamp = function(doc,nsMap) {
 	// context members
 
 	/**
-	  arclamp builds this JavaScript object
+	  qjsonmlReader builds this JavaScript object
 	  @field
 	*/
 	this.root = []
@@ -175,17 +175,19 @@ var arclamp = (this.exports||(exports = {})).arclamp = function(doc,nsMap) {
 // execution functions
 
 /**
-  parse the arclamp's document
+  parse the qjsonml document
+  @private
 */
-arclamp.prototype.parse = function() {
+qjsonmlReader.prototype.parse = function() {
 	if(this.resetBetweenParses)
 		this.root = []
 	this.saxXmlReader.parseString(this.doc)
 }
 /**
-  wire up arclamp's handlers
+  wire up qsjonml's handlers
+  @private
 */
-arclamp.prototype.wire = function() {
+qjsonmlReader.prototype.wire = function() {
 	this.defaultHandler2.endPrefixMapping = this.endPrefixMapping
 	this.defaultHandler2.startPrefixMapping = this.startPrefixMapping
 	this.defaultHandler2.startElement = this.startElement
@@ -203,7 +205,7 @@ arclamp.prototype.wire = function() {
   @returns the new element object
   @private
 */
-arclamp.prototype.buildElement = function(uri,localName,qName,attributes,parent) {
+qjsonmlReader.prototype.buildElement = function(uri,localName,qName,attributes,parent) {
 	var name = this.convertQName(qName,localName)
 	  o = [name]
 	parent.push(o)
@@ -216,7 +218,7 @@ arclamp.prototype.buildElement = function(uri,localName,qName,attributes,parent)
   @param atts the attributes object being added to
   @private
 */
-arclamp.prototype.buildAttribute = function(att,atts) {
+qjsonmlReader.prototype.buildAttribute = function(att,atts) {
 	var name = this.convertQName(att.qName, att.localName)
 	atts[name] = att.value
 }
@@ -227,7 +229,7 @@ arclamp.prototype.buildAttribute = function(att,atts) {
   @returns the namespace of this element
   @private
 */ 
-arclamp.prototype.parseQNameNS = function(name) {
+qjsonmlReader.prototype.parseQNameNS = function(name) {
 	if(this.blindCopyQName)
 		return name
 	var i = name.indexOf(":"),
@@ -242,7 +244,7 @@ arclamp.prototype.parseQNameNS = function(name) {
   @returns the element name prefixed by the canonical prefix.
   @private
 */ 
-arclamp.prototype.convertQName = function(name,localName) {
+qjsonmlReader.prototype.convertQName = function(name,localName) {
 	if(this.blindCopyQName)
 		return name
 	var i = name.indexOf(":"),
