@@ -40,12 +40,6 @@ var qjsonmlReader = (this.exports||(exports = {})).QJsonMLReader = function(doc,
 	*/
 	this.saxXmlReader = XMLReaderFactory.createXMLReader()
 	/**
-	  optional step to clean root between parses
-	  @field
-	  @private
-	*/
-	this.resetBetweenParses = false
-	/**
 	  logger
 	  @field
 	  @private
@@ -54,18 +48,7 @@ var qjsonmlReader = (this.exports||(exports = {})).QJsonMLReader = function(doc,
 	//this.log = function(args,s,name) {}
 
 	// context members
-
-	/**
-	  qjsonmlReader builds this JavaScript object
-	  @field
-	*/
-	this.root = []
-	/**
-	  element stack
-	  @field
-	  @private
-	*/
-	this.stack = [this.root]
+	
 	/**
 	  default namespace stack
 	  @field
@@ -90,11 +73,6 @@ var qjsonmlReader = (this.exports||(exports = {})).QJsonMLReader = function(doc,
 	var top = function(array) {
 		return array[array.length-1]
 	}
-	/**
-	  top of element stack
-	  @private
-	*/
-	this.topStack = function() { return top(self.stack) }
 	/**
 	  top of default namespace stack
 	*/
@@ -133,16 +111,21 @@ var qjsonmlReader = (this.exports||(exports = {})).QJsonMLReader = function(doc,
 	*/
 	this.__proto__.startElement = function(uri,localName,qName,attributes) {
 		self.log(arguments,self,"startElement")
-		// create this new element, and build it on it's parent.
-		var parent = self.topStack(),
-		  cur = self.buildElement(uri,localName,qName,attributes,parent)
-		// descend into
-		self.stack.push(cur)
+		// create new element
+		self.writer.startArray()
+		// write element name
+		self.writer.primitive(self.convertQName(qName,localName))
+		// start attributes hash
+		self.writer.startObject()
 		// write attributes
 		var atts = {}
-		for(var j = 0; j < attributes.attsArray.length; ++j)
-			self.buildAttribute(attributes.attsArray[j],atts)
-		cur.push(atts)
+		for(var j = 0; j < attributes.attsArray.length; ++j) {
+			var att = attributes.attsArray[j]
+			self.writer.startObjectEntry(self.convertQName(att.qName,att.localName))
+			self.writer.primitive(att.value)
+			self.writer.endObjectEntry()
+		}
+		self.writer.endObject()
 	}
 	/**
 	  pop the element stack
@@ -150,7 +133,7 @@ var qjsonmlReader = (this.exports||(exports = {})).QJsonMLReader = function(doc,
 	*/
 	this.__proto__.endElement = function(uri,localName,qName) {
 		self.log(arguments,self,"endElement")
-		self.stack.pop()
+		self.writer.endArray()
 	}
 	/**
 	  read in some character values
@@ -158,8 +141,7 @@ var qjsonmlReader = (this.exports||(exports = {})).QJsonMLReader = function(doc,
 	*/
 	this.__proto__.characters = function(ch,start,length) {
 		self.log(arguments,self,"characters")
-		var cur = self.topStack()
-		(self.value||(self.value = "")) += ch
+		self.writer.primitive(ch)
 	}
 	this.__proto__.comment = function(ch,start,length) {
 		// nop
@@ -193,34 +175,6 @@ qjsonmlReader.prototype.wire = function() {
 	this.defaultHandler2.startElement = this.startElement
 	this.defaultHandler2.endElement= this.endElement
 	this.saxXmlReader.setHandler(this.defaultHandler2)
-}
-
-// builder functions
-
-/**
-  builds an element object on to a parent element
-  @param qName prefixed name for this element.
-  @param localname non-prefixed name for this element.
-  @param parent the parent object to build on to.
-  @returns the new element object
-  @private
-*/
-qjsonmlReader.prototype.buildElement = function(uri,localName,qName,attributes,parent) {
-	var name = this.convertQName(qName,localName)
-	  o = [name]
-	parent.push(o)
-	return o
-}
-
-/**
-  builds an attribute entry in an attributes object
-  @param att the attribute to convert
-  @param atts the attributes object being added to
-  @private
-*/
-qjsonmlReader.prototype.buildAttribute = function(att,atts) {
-	var name = this.convertQName(att.qName, att.localName)
-	atts[name] = att.value
 }
 
 /**
