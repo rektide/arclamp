@@ -9,7 +9,7 @@ var qjsonmlReader = (this.exports||(exports = {})).QJsonMLReader = function(doc,
 	// insure context
 
 	if(!(this instanceof qjsonmlReader))
-		return new qjsonmlReader(doc)
+		return new qjsonmlReader(doc,nsMap)
 
 	// parsing members
 
