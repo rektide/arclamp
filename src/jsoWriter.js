@@ -7,7 +7,7 @@ var jsoWriter = (this.exports||(exports = {})).JsoWriter = function() {
 	// insure context
 
 	if(!(this instanceof jsoWriter))
-		return new jsoWriter(nsMap)
+		return new jsoWriter()
 
 	/**
 	  logger
