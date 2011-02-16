@@ -1,9 +1,12 @@
+if(typeof exports === undefined)
+	var exports = {}
+
 /**
  * @name jsoWriter
  * @returns the JsonContentHandler
  * @author <a href="http://voodoowarez.com/rektide">rektide</a> &lt;<a href="mailto:rektide@voodoowarez.com">rektide@voodoowarez.com</a>&gt;
  */
-var jsoWriter = (this.exports||(exports = {})).JsoWriter = function() {
+var jsoWriter = exports.JsoWriter = function() {
 	// insure context
 
 	if(!(this instanceof jsoWriter))
@@ -46,7 +49,7 @@ var jsoWriter = (this.exports||(exports = {})).JsoWriter = function() {
 	var isArray = function(o) { return o ? o.constructor == Array : false }
 
 	/**
-	  add a new object into the top of the stack
+	  add a new object on to the top of the stack
 	*/
 	var startContent = function(o,name) {
 		var cur = getTopStack()
@@ -62,7 +65,7 @@ var jsoWriter = (this.exports||(exports = {})).JsoWriter = function() {
 	
 	}
 
-	// methods
+	// JsonContentHandler implementors
 
 	this.startJSON = function() {
 		if(self.getStack().length)
