@@ -2,6 +2,11 @@
 	"name": "arclamp",
 	"description": "namespace aware xml to json transformer",
 	"version": "1.0.0",
+	"modules": {
+		"qjsonmlReader": "./qjsonmlReader",
+		"jsoWriter": "./jsoWriter",
+		"pathedJsoWriter": "./pathedJsoWriter"
+	},
 	"keywords": ["xml", "json", "transformer", "converter"],
 	"maintainers": [{
 		"name": "Matthew 'rektide' Fowle",
