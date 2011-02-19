@@ -75,7 +75,7 @@ var jsoWriter = exports.JsoWriter = function() {
 	this.endJSON = function() {
 		var len = self.getStack.length
 		if(len)
-			throw "Stack depth still: "+len)
+			throw "Stack depth still: "+len
 	}
 	this.startObject = function() {
 		var o = {}
@@ -104,7 +104,7 @@ var jsoWriter = exports.JsoWriter = function() {
 
 	this.endObjectEntry = function() {
 		var cur = getTopStack()
-		if(isArray(cur)
+		if(isArray(cur))
 			throw "endObjectEntry while parsing an array"
 		if(!slot)
 			throw "endObjectEntry with no slot selected"
@@ -136,6 +136,11 @@ var jsoWriter = exports.JsoWriter = function() {
 	  @protected
 	*/
 	this.getStack = function() { return stack }
+
+	/**
+	  get the object being writen
+	*/
+	this.getContent = function() { return self.getStack()[0] || null; }
 
 	return this
 }

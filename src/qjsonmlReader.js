@@ -1,3 +1,6 @@
+if(typeof exports === undefined)
+	var exports = {}
+
 /**
  * @name qjsonml
  * @description xml to json converter, based on JsonML, but element names are qualified, according to an optional namespace map, a blind copy scheme, or by default having the entire namespace injected whole as a prefix.  sax based to permit handling of very large documents.
@@ -5,11 +8,11 @@
  * @param doc input xml string to parse into json
  * @author <a href="http://voodoowarez.com/rektide">rektide</a> &lt;<a href="mailto:rektide@voodoowarez.com">rektide@voodoowarez.com</a>&gt;
  */
-var qjsonmlReader = (this.exports||(exports = {})).QJsonMLReader = function(doc,nsMap) {
+var qjsonmlReader = exports.QJsonMLReader = function(doc,writer,nsMap) {
 	// insure context
 
 	if(!(this instanceof qjsonmlReader))
-		return new qjsonmlReader(doc,nsMap)
+		return new qjsonmlReader(doc,writer,nsMap)
 
 	// parsing members
 
@@ -112,20 +115,20 @@ var qjsonmlReader = (this.exports||(exports = {})).QJsonMLReader = function(doc,
 	this.__proto__.startElement = function(uri,localName,qName,attributes) {
 		self.log(arguments,self,"startElement")
 		// create new element
-		self.writer.startArray()
+		writer.startArray()
 		// write element name
-		self.writer.primitive(self.convertQName(qName,localName))
+		writer.primitive(self.convertQName(qName,localName))
 		// start attributes hash
-		self.writer.startObject()
+		writer.startObject()
 		// write attributes
 		var atts = {}
 		for(var j = 0; j < attributes.attsArray.length; ++j) {
 			var att = attributes.attsArray[j]
-			self.writer.startObjectEntry(self.convertQName(att.qName,att.localName))
-			self.writer.primitive(att.value)
-			self.writer.endObjectEntry()
+			writer.startObjectEntry(self.convertQName(att.qName,att.localName))
+			writer.primitive(att.value)
+			writer.endObjectEntry()
 		}
-		self.writer.endObject()
+		writer.endObject()
 	}
 	/**
 	  pop the element stack
@@ -133,7 +136,7 @@ var qjsonmlReader = (this.exports||(exports = {})).QJsonMLReader = function(doc,
 	*/
 	this.__proto__.endElement = function(uri,localName,qName) {
 		self.log(arguments,self,"endElement")
-		self.writer.endArray()
+		writer.endArray()
 	}
 	/**
 	  read in some character values
@@ -141,7 +144,7 @@ var qjsonmlReader = (this.exports||(exports = {})).QJsonMLReader = function(doc,
 	*/
 	this.__proto__.characters = function(ch,start,length) {
 		self.log(arguments,self,"characters")
-		self.writer.primitive(ch)
+		writer.primitive(ch)
 	}
 	this.__proto__.comment = function(ch,start,length) {
 		// nop
