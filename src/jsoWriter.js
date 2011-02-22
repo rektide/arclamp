@@ -17,8 +17,8 @@ var jsoWriter = exports.JsoWriter = function() {
 	  @field
 	  @private
 	*/
-	var log = function(args,s,name) { console.log(args,s,name) }
-	//var log = function(args,s,name) {}
+	//var log = function(args,s,name) { console.log(args,s,name) }
+	var log = function(args,s,name) {}
 
 	// context members
 
@@ -57,10 +57,13 @@ var jsoWriter = exports.JsoWriter = function() {
 			if(cur[slot])
 				throw name+" with content already in slot "+slot
 			cur[slot] = o
-		} else {
-			if(!isArr(cur)&&!cur)
+		} else if(cur) {
+			if(!isArray(cur)&&!cur)
 				throw name+" while parsing an object"
 			cur.push(o)
+		} else {
+			// haven't begun yet
+			self.getStack().push(o)
 		}
 	
 	}
