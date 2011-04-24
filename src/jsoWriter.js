@@ -109,8 +109,6 @@ var jsoWriter = exports.JsoWriter = function() {
 		var cur = getTopStack()
 		if(isArray(cur))
 			throw "endObjectEntry while parsing an array"
-		if(!slot)
-			throw "endObjectEntry with no slot selected"
 		slot = null
 	}
 
@@ -118,6 +116,7 @@ var jsoWriter = exports.JsoWriter = function() {
 		var o = []
 		startContent(o,"startArray")
 		self.getStack().push(o)
+		slot = null
 	}
 
 	this.endArray = function() {
