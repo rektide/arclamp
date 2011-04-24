@@ -3,9 +3,11 @@
 	"description": "namespace aware xml to json transformer",
 	"version": "1.0.0",
 	"modules": {
-		"qjsonmlReader": "./qjsonmlReader",
+		"jsoReader": "./jsoReader",
 		"jsoWriter": "./jsoWriter",
-		"pathedJsoWriter": "./pathedJsoWriter"
+		"pathedJsoWriter": "./pathedJsoWriter",
+		"qjsonmlReader": "./qjsonmlReader",
+		"qjsonmlWriter": "./qjsonmlWriter"
 	},
 	"keywords": ["xml", "json", "transformer", "converter"],
 	"maintainers": [{
@@ -16,7 +18,7 @@
 	"homepage": "http://voodoowarez.com/arclamp",
 	"main": "arclamp",
 	"implements": ["CommonJS/Modules/1.0"],
-	"engines": { "node": ">=0.3.4 <0.3.6"},
-	"repository": {"type": "git", "url": "http://git.voodoowarez.com/arclamp.git"},
+	"engines": { "node": ">=0.4.0" },
+	"repository": {"type": "git", "url": "http://git.voodoowarez.com/arclamp.git"}
 }
 	
