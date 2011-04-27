@@ -1,14 +1,11 @@
-if(typeof exports === undefined)
-	var exports = {}
-
 /**
  * @name jsoWriter
  * @returns the JsonContentHandler
  * @author <a href="http://voodoowarez.com/rektide">rektide</a> &lt;<a href="mailto:rektide@voodoowarez.com">rektide@voodoowarez.com</a>&gt;
  */
 var jsoWriter = exports.JsoWriter = function() {
-	// insure context
 
+	// insure context
 	if(!(this instanceof jsoWriter))
 		return new jsoWriter()
 

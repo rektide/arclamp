@@ -1,9 +1,3 @@
-if(typeof exports == "undefined")
-	exports = {}
-
-if(typeof require == "undefined")
-	require = null
-
 /**
  * @name jsoReader
  * @description reads from in-memory JavaScript Objects(/Arrays).
@@ -41,7 +35,7 @@ var jsoReader = exports.JsoReader = function(obj,writer) {
 		}
 	}
 
-	writer.startJson()
+	writer.startJSON()
 	parseContent(obj)
-	writer.endJson()
+	writer.endJSON()
 }
