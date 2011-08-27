@@ -1,4 +1,4 @@
-var jr = require("arclamp/jsoReader"),
+var jr = require("arclamp/jso/jsoReader"),
   assert = require("assert"),
   util = require("util")
 

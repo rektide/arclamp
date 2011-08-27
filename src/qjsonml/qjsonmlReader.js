@@ -5,7 +5,7 @@ var hr = typeof require
 if(hr == "undefined")
 	require = null
 
-var dh2 = require ?  require("jssaxparser/DefaultHandlers") : DefaultHandler2
+var dh2 = require ?  require("jssaxparser/compiled.js").DefaultHandler2 : DefaultHandler2
 
 /**
  * @name qjsonml
@@ -41,6 +41,7 @@ var qjsonmlReader = exports.QJsonMLReader = function(doc,writer,nsMap) {
 	  @field
 	  @private
 	*/
+	console.log("iam",dh2)
 	this.defaultHandler2 = new dh2()
 	/**
 	  sax reader

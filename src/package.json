@@ -2,13 +2,6 @@
 	"name": "arclamp",
 	"description": "namespace aware xml to json transformer",
 	"version": "1.0.0",
-	"modules": {
-		"jsoReader": "./jsoReader",
-		"jsoWriter": "./jsoWriter",
-		"pathedJsoWriter": "./pathedJsoWriter",
-		"qjsonmlReader": "./qjsonmlReader",
-		"qjsonmlWriter": "./qjsonmlWriter"
-	},
 	"keywords": ["xml", "json", "transformer", "converter"],
 	"maintainers": [{
 		"name": "Matthew 'rektide' Fowle",
@@ -16,8 +9,11 @@
 		"web": "http://voodoowarez.com"
 	}],
 	"homepage": "http://voodoowarez.com/arclamp",
-	"main": "arclamp",
 	"implements": ["CommonJS/Modules/1.0"],
 	"engines": { "node": ">=0.4.0" },
+	"dependencies": {
+		"q": ">=0.7.0",
+		"jssaxparser": ">=1.0.0"
+	},
 	"repository": {"type": "git", "url": "http://git.voodoowarez.com/arclamp.git"}
 }

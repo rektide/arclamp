@@ -1,5 +1,6 @@
 var fs = require('fs'),
-  util = require('util')
+  util = require('util'),
+  Q = require('q')
 
 var root = ""
 if(typeof window !== 'undefined')

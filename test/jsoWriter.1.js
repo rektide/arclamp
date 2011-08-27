@@ -1,4 +1,4 @@
-var jw = require("arclamp/jsoWriter"),
+var jw = require("arclamp/jso/jsoWriter"),
   assert = require("assert"),
   util = require("util")
 

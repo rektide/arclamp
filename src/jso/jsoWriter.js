@@ -8,6 +8,7 @@ var jsoWriter = exports.JsoWriter = function() {
 	// insure context
 	if(!(this instanceof jsoWriter))
 		return new jsoWriter()
+	var self = this
 
 	/**
 	  logger
@@ -25,42 +26,43 @@ var jsoWriter = exports.JsoWriter = function() {
 	  @private
 	*/
 	var stack = []
+	this._getStack = function() { return stack }
 
 	/**
-	  slot designated by startObjectEntry
+	  self._slot designated by startObjectEntry
 	  @field
 	  @private
 	*/	
-	var slot = null
+	self._slot = null
 
-	var self = this
 
 	// utility functions
+
+	this._getTop = function(s) { return s && s.length >= 0 ? s[s.length-1] : null } 
 
 	/**
 	  top of element stack
 	  @private
 	*/
-	var getTopStack = function() { var s = self.getStack(); return s && s.length >= 0 ? s[s.length-1] : null } 
-
-	var isArray = function(o) { return o ? o.constructor == Array : false }
+	this._getTopStack = function() { return self._getTop(self._getStack()) }
+	this._isArray = function(o) { return o ? o.constructor == Array : false }
 
 	/**
 	  add a new object on to the top of the stack
 	*/
-	var startContent = function(o,name) {
-		var cur = getTopStack()
-		if(slot) {
-			if(cur[slot])
-				throw name+" with content already in slot "+slot
-			cur[slot] = o
+	this._startContent = function(o,name) {
+		var cur = self._getTopStack()
+		if(self._slot) {
+			if(cur[self._slot])
+				throw name+" with content already in self._slot "+self._slot
+			cur[self._slot] = o
 		} else if(cur) {
-			if(!isArray(cur)&&!cur)
+			if(!self._isArray(cur)&&!cur)
 				throw name+" while parsing an object"
 			cur.push(o)
 		} else {
 			// haven't begun yet
-			self.getStack().push(o)
+			self._getStack().push(o)
 		}
 	
 	}
@@ -68,65 +70,65 @@ var jsoWriter = exports.JsoWriter = function() {
 	// JsonContentHandler implementors
 
 	this.startJSON = function() {
-		if(self.getStack().length)
+		if(self._getStack().length)
 			throw "Already parsing"
 	}
 
 	this.endJSON = function() {
-		var len = self.getStack.length
+		var len = self._getStack().length
 		if(len)
 			throw "Stack depth still: "+len
 	}
 	this.startObject = function() {
 		var o = {}
-		startContent(o,"startObject")
-		self.getStack().push(o)
+		self._startContent(o,"startObject")
+		self._getStack().push(o)
 		
 	}
 	
 	this.endObject = function() {
-		var cur = getTopStack()
+		var cur = self._getTopStack()
 		if(!cur)
 			throw "endObject with an empty stack"
-		if(isArray(cur))
+		if(self._isArray(cur))
 			throw "endObject while parsing an Array"
-		self.getStack().pop()
+		self._getStack().pop()
 	}
 
 	this.startObjectEntry = function(key) {
-		var cur = getTopStack()
+		var cur = self._getTopStack()
 		if(!cur)
 			throw "startObjectEntry with an empty stack"
-		if(isArray(cur))
+		if(self._isArray(cur))
 			throw "startObjectEntry while parsing an Array"
-		slot = key
+		self._slot = key
 	}
 
 	this.endObjectEntry = function() {
-		var cur = getTopStack()
-		if(isArray(cur))
+		var cur = self._getTopStack()
+		if(self._isArray(cur))
 			throw "endObjectEntry while parsing an array"
-		slot = null
+		self._slot = null
 	}
 
 	this.startArray = function() {
 		var o = []
-		startContent(o,"startArray")
-		self.getStack().push(o)
-		slot = null
+		self._startContent(o,"startArray")
+		self._getStack().push(o)
+		self._slot = null
 	}
 
 	this.endArray = function() {
-		var cur = getTopStack()
-		if(!isArray(cur))
+		var cur = self._getTopStack()
+		if(!self._isArray(cur))
 			throw "endArray while parsing an Object"
 		if(!cur)
 			throw "endArray with nothing on the stack"
-		self.getStack().pop()
+		self._getStack().pop()
 	}
 
 	this.primitive = function(val) {
-		startContent(val,"primitive")
+		self._startContent(val,"primitive")
 	}
 
 	/**
@@ -139,7 +141,7 @@ var jsoWriter = exports.JsoWriter = function() {
 	/**
 	  get the object being writen
 	*/
-	this.getContent = function() { return self.getStack()[0] || null; }
+	this.getContent = function() { return self._getStack()[0] || null; }
 
 	return this
 }

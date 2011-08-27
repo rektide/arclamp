@@ -1,0 +1,21 @@
+{
+	"author": "rektide <rektide@voodoowarez.com> (http://rektide.voodoowarez.com)",
+	"name": "arclamp-test",
+	"description": "arclamp-test",
+	"version": "1.0.0",
+	"repository": {
+		"type": "git",
+		"url": "scm@git.voodoowarez.com:arclamp.git"
+	},
+     "implements": ["CommonJS/Modules/1.0"],
+     "scripts": {
+		"preinstall": "npm link ../src"
+	},
+	"engines": {
+		"node": "*"
+	},
+	"dependencies": {
+		"arclamp": ">=1.0.0"
+	},
+	"devDependencies": {}
+}
