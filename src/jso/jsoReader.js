@@ -1,6 +1,6 @@
 /**
  * @name jsoReader
- * @description reads from in-memory JavaScript Objects(/Arrays).
+ * @description emits a ContentHandler by reading an in-memory JavaScript Objects(/Arrays)
  * @param obj the object to read
  * @param writer the JsonHandler to write to
  * @author <a href="http://voodoowarez.com/rektide">rektide</a> &lt;<a href="mailto:rektide@voodoowarez.com">rektide@voodoowarez.com</a>&gt;

@@ -1,6 +1,7 @@
 /**
  * @name jsoWriter
- * @returns the JsonContentHandler
+ * @description builds a real object when used as a JsonContentHandler.
+ * @returns the JsonContentHandler, with getContent() to read the status.
  * @author <a href="http://voodoowarez.com/rektide">rektide</a> &lt;<a href="mailto:rektide@voodoowarez.com">rektide@voodoowarez.com</a>&gt;
  */
 var jsoWriter = exports.JsoWriter = function() {

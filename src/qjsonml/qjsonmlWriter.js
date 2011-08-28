@@ -6,9 +6,9 @@ if(typeof require == "undefined")
 
 /**
  * @name qjsonmlWriter
- * @description QJsonML to XML converter. sax based to permit handling of very large objects.
+ * @description an JsonContentHandler implementation that will output SAX for valid QJsonML input.
  * @returns 
- * @param obj QJsonML object to write out.
+ * @param obj QJsonML object to write out for valid QJsonML input.
  * @param writer SAX writer to use for writing XML content.
  * @param prefixGenerator function which maps any given namespace into a prefix.
  * @author <a href="http://voodoowarez.com/rektide">rektide</a> &lt;<a href="mailto:rektide@voodoowarez.com">rektide@voodoowarez.com</a>&gt;
@@ -17,7 +17,7 @@ var qjsonmlWriter = exports.QJsonMLWriter = function(obj,writer,nsGenerator) {
 	// insure context
 
 	if(!(this instanceof qjsonmlWriter))
-		return new qjsonmlWriter(obj,writer,nsMap)
+		return new qjsonmlWriter(obj,writer,nsGenerator)
 
 	// parsing members
 
@@ -26,7 +26,7 @@ var qjsonmlWriter = exports.QJsonMLWriter = function(obj,writer,nsGenerator) {
 	  @field
 	  @private
 	*/
-	this.nsMap = nsMap
+	//this.nsGenerator = nsGenerator
 
 	/**
 	  logger
@@ -102,4 +102,10 @@ var qjsonmlWriter = exports.QJsonMLWriter = function(obj,writer,nsGenerator) {
 		writer.startElement(rn[NAME_NAMESPACE], rn[NAME_LOCALNAME], rn[NAME_QNAME], atts)
 	}
 	return this
+}
+
+exports.makeGenerator=function(map) {
+	return function(slot) {
+		return map[slot]
+	}
 }

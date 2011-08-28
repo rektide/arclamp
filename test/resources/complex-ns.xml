@@ -1,0 +1,16 @@
+<root xmlns='yoyodyne/y' xmlns:y='yoyodyne/y' xmlns:v='voodoowarez.com/schema/v'>
+	<!-- comment one -->
+	<distant xmlns='eldergods.com/schema/e' v:bar='foo' attr='sane' >
+		<person name='dog'/>
+		<days><sunday/><tuesday/><v:holiday/></days>
+	</distant>
+	<distant xmlns:e='eldergods.com/schema/e' defTag='defValue' v:tag='tagValue'>
+		<foo e:bar='seven'/>
+		<foo content='eight' />
+	</distant>
+	<distant>
+		mr boey
+		<v:foo bar='six'/>
+		mr bungle
+	</distant>
+</root>
