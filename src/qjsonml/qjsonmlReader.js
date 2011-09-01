@@ -22,17 +22,7 @@ var qjsonmlReader = exports.QJsonMLReader = function(nsMap,jsonContentHandler,op
 	if(!(this instanceof qjsonmlReader))
 		return new qjsonmlReader(nsMap,jsonContentHandler,optSaxParser)
 	var self = this
-
-	this.setHandler = function(jsonContentHandler) {
-		if(!jsonContentHandler || typeof jsonContentHandler != "object")
-			jsonContentHandler = {}
-		var prereqs = ["startObject","endObject","startObjectEntry","endObjectEntry","startArray","endArray","primitive"]
-		for(var i : prereqs)
-			if(!jsonContentHandler[prereqs[i]])
-				jsonContentHandler[preqreqs[i]] = function() {}
-		self.jsonContentHandler = jsonContentHandler
-	}
-	this.setHandler(jsonContentHandler)
+)
 
 	// parsing members
 
@@ -169,6 +159,22 @@ var qjsonmlReader = exports.QJsonMLReader = function(nsMap,jsonContentHandler,op
 	this.comment = function(ch,start,length) {
 		// nop
 	}
+
+	// set our target jsonContentHandler
+	this.setHandler = function(jsonContentHandler) {
+		if(typeof jsonContentHandler == "function") {
+			return self.jsonContentHandler = jsonContentHandler(this)
+		}
+		if(!jsonContentHandler || typeof jsonContentHandler != "object")
+			jsonContentHandler = {}
+		var prereqs = ["startObject","endObject","startObjectEntry","endObjectEntry","startArray","endArray","primitive"]
+		for(var i : prereqs)
+			if(!jsonContentHandler[prereqs[i]])
+				jsonContentHandler[preqreqs[i]] = function() {}
+		return self.jsonContentHandler = jsonContentHandler
+	}
+	this.setJsonContentHandler = this.setHandler
+	this.setHandler(jsonContentHandler)
 
 	if(optSaxParser && optSaxParser.setHandler)
 		optSaxParser.setHandler(this)
