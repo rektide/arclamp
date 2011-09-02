@@ -26,3 +26,42 @@ var saxHandler = exports.SaxHandler = function() {
 
 	return this
 }
+
+var nameToNumber = {
+	"characters": 0,
+	"endDocument": 1,
+	"endElement": 2,
+	"endPrefixMapping": 3,
+	"ignorableWhitespace": 4,
+	"processingInstruction": 5,
+	"setDocumentLocator": 6,
+	"skippedEntity": 7,
+	"startDocument": 8,
+	"startElement": 9,
+	"startPrefixMapping": 10
+	}
+
+var numberToName = [
+	"characters",
+	"endDocument",
+	"endElement",
+	"endPrefixMapping",
+	"ignorableWhitespace",
+	"processingInstruction",
+	"setDocumentLocator",
+	"skippedEntity",
+	"startDocument",
+	"startElement",
+	"startPrefixMapping"
+	]
+
+var saxEnum = exports.SaxEnum = function(key) {
+	if(key) {
+		return isNaN(key) ? nameToNumber[key] : numberToName[key]
+	}
+	return nameToNumber
+}
+
+for(var i in numberToName)
+	if(!isNaN(i))
+		exports[numberToName[i]] = i

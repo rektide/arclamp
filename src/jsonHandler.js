@@ -23,3 +23,38 @@ var jsonHandler = exports.jsonHandler = function() {
 
 	return this
 }
+
+var nameToNumber = {
+	"startJSON": 0,
+	"endJSON": 1,
+	"startObject": 2,
+	"endObject": 3,
+	"startObjectEntry": 4,
+	"endObjectEntry": 5,
+	"startArray": 6,
+	"endArray": 7,
+	"primitive": 8
+	}
+
+var numberToName = [
+	"startJSON",
+	"endJSON",
+	"startObject",
+	"endObject	",
+	"startObjectEntry",
+	"endObjectEntry",
+	"startArray",
+	"endArray",
+	"primitive"
+	]
+
+var jsonEnum = exports.JsonEnum = function(key) {
+	if(key) {
+		return isNaN(key) ? nameToNumber[key] : numberToName[key]
+	}
+	return nameToNumber
+}
+
+for(var i in numberToName)
+	if(!isNaN(i))
+		exports[numberToName[i]] = i
