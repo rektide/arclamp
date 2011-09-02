@@ -50,7 +50,7 @@ var numberToName = [
 
 var jsonEnum = exports.JsonEnum = function(key) {
 	if(key) {
-		return isNaN(key) ? nameToNumber[key] : numberToName[key]
+		return numberToName[key] || nameToNumber[key]
 	}
 	return nameToNumber
 }

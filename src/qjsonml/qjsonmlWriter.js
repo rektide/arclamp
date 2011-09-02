@@ -2,7 +2,9 @@ if(typeof exports == "undefined")
 	exports = {}
 
 if(typeof require == "undefined")
-	require = null
+	require = {}
+
+var json = require("arclamp/jsonHandler")
 
 /**
  * @name qjsonmlWriter
@@ -73,6 +75,8 @@ var qjsonmlWriter = exports.QJsonMLWriter = function(obj,writer,nsGenerator) {
 	* indexes into debased name
 	* @enum
 	*/
+
+	/*
 	var NAME_NAMESPACE = 0,
 	  NAME_LOCALNAME = 1,
 	  NAME_PREFIX = 2,
@@ -101,6 +105,97 @@ var qjsonmlWriter = exports.QJsonMLWriter = function(obj,writer,nsGenerator) {
 		}
 		writer.startElement(rn[NAME_NAMESPACE], rn[NAME_LOCALNAME], rn[NAME_QNAME], atts)
 	}
+	*/
+
+	this._expected = null
+	this._tokenCount = 0
+
+	this._handle = function(type,args) {
+		++self._tokenCount
+		var expected = self._expected
+		if(expected.handle(type,args))
+		{
+			expected = expected.parent
+		}
+	}
+
+	for(var name in json.JsonEnum) {
+		var number = json.JsonEnum[name]
+		this[name] = function() { return self._handle(number,arguments) }
+	}
+
+	this._expected_startDocument = function() {
+		var self_startDocument = this
+		this.handle = function(type,args) {
+			if(type == json.startArray) {
+				self._expected.push(new self._expected_element(self_startDocument))
+			} if(type == json.startDocument || type == json.endDocument) {
+			} else {
+				self._validation_err("began with type other than an array or document:",type)
+			}
+		}
+	}
+	this.expected = new this._expected_startDocument()
+	this.expected.parent = this.expected
+
+	this._expected_element = function(parent) {
+		this.parent = parent
+		var self_element = this
+
+		var pos = 0
+		this._tagname = undefined
+
+		this.handle = function(type,args) {
+			if(pos !== undefined)
+			{
+				if(++pos == 1)
+				{
+					if(type == json.primitive)
+						self_element._tagname = args[0]
+					else
+						self._validation_err("primitive tagname expected")
+					return
+				}
+				else if(pos == 2 && type == json.startObject)
+				{
+					self._expected.push(new self._expected_attributes(self_element))
+					return
+				}
+				else
+				{
+					self._handler.startElement("",self_element._tagname,"",null)
+					pos = undefined
+				}
+			}
+			if(type == json.primitive) {
+				self._handler.characters(args[0])
+			} else if(type == json.startElement) {
+				self._expected.push(new self._expected_element())
+			} else if(type instanceof self._expected_closeArray) {
+				self._handler.endElement()
+				return true
+			} else {
+				self._validation_err("expected_startArray can't pop a",type)
+			}
+			return
+		}
+	}
+
+	this._expected_attributes = function(parent) {
+		this.parent = parent
+		this.attrs = {}
+		var self_attributes = this
+		this.handle = function(type,args,expective) {
+			if(type == json.endObject) {
+				self._handler.startElement("",parent.tag,"",self_attributes)
+				return true
+			}
+		}
+	}
+
+	this._validation_err = function() {
+	}
+
 	return this
 }
 

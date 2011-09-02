@@ -57,7 +57,7 @@ var numberToName = [
 
 var saxEnum = exports.SaxEnum = function(key) {
 	if(key) {
-		return isNaN(key) ? nameToNumber[key] : numberToName[key]
+		return numberToName[key] || nameToNumber[key]
 	}
 	return nameToNumber
 }
