@@ -22,7 +22,7 @@ var qjsonmlReader = exports.QJsonMLReader = function(nsMap,jsonContentHandler,op
 	if(!(this instanceof qjsonmlReader))
 		return new qjsonmlReader(nsMap,jsonContentHandler,optSaxParser)
 	var self = this
-)
+
 
 	// parsing members
 
@@ -168,7 +168,7 @@ var qjsonmlReader = exports.QJsonMLReader = function(nsMap,jsonContentHandler,op
 		if(!jsonContentHandler || typeof jsonContentHandler != "object")
 			jsonContentHandler = {}
 		var prereqs = ["startObject","endObject","startObjectEntry","endObjectEntry","startArray","endArray","primitive"]
-		for(var i : prereqs)
+		for(var i in prereqs)
 			if(!jsonContentHandler[prereqs[i]])
 				jsonContentHandler[preqreqs[i]] = function() {}
 		return self.jsonContentHandler = jsonContentHandler
