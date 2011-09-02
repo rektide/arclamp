@@ -1,0 +1,30 @@
+var pieces = {
+	qjsonmlReader: ["export","qjsonml/qjsonmlReader","QJsonMLReader")],
+	qjsonmlPrinter: ["export","qjsonml/qjsonmlStreamPrinter","QJsonMLStreamPrinter"],
+	qjsonmlWriter: ["export","qjsonml/qjsonmlWriter","QJSONMLWriter"],
+	jsoPrinter: ["export", "jso/jsoPrinter", "JsoPrinter"],
+	complexNs: ["vresource", "complex-ns"],
+	complexNsXml: ["resource", "complex-ns.xml"],
+	nsMap: ["resource", "ns-map"]
+	nsMapA: ["nsMap","a"],
+}
+
+var qjsonml_pipes = {
+
+	// optional hash to hold additional contexts/pieces
+	round_trip_1: ["pipe", {}, "complexNsXml", ["qjsonmlReader", "nsMapA", "qjsonmlWriter"], "jsoPrinter", ["complexNs", "json"]],
+
+	reader_1_a: ["pipe", "complexNsXml", ["qjsonmlWriter", null, "qjsonmlPrinter"], ["complexNs","qjsonml"]],
+	reader_1_b: ["pipe", "complexNsXml", ["qjsonmlWriter", null, "qjsonmlPrinter"], ["resource", "complex-ns.qjsonml"]],
+	reader_1_c: ["pipe", "complexNsXml", ["qjsonmlWriter", null, ["export", "qjsonml/qjsonmlStreamPrinter", "QJsonMLStreamPrinter"], ["complexNs","qjsonml"]],
+	reader_1_d: ["pipe", ["complexNs","xml"], ["qjsonmlReader", null, "qjsonmlPrinter"], ["complexNs","qjsonml"]]
+}
+
+/* stdio based input,output,pipe... model
+[
+	["complex-ns.xml",null,              "qjsonml/qjsonmlReader","qjsonml/qjsonmlWriter"],
+	["complex-ns.xml","complex-ns.json", "qjsonml/qjsonmlReader","jso/jsoWriter"],
+	["complex-ns.json","complex-ns.xml", "jso/jsoReader","qjsonml/qjsonmlWriter"]
+	["complex-ns.json","complex-ns.json","jso/jsoReader","jso/jsoWriter"]
+]
+*/
