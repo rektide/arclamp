@@ -1,15 +1,23 @@
 # Arclamp #
+
 streaming javascript object library
 -----
 
-# Essence # 
+# Essence #
 
-Arclamp is a library for streaming content through JSON.simple's SAX-inspired [ContentHandler](http://code.google.com/p/json-simple/source/browse/trunk/src/org/json/simple/parser/ContentHandler.java) interface, built to allow visibility into large data sets across a wide spectrum of representations.  Just as it's the gap between anode & cathode in a light emitting arclamp, the arclamp streamer's luminence is in what's not there: only a minimum amount of data needs to reside in memory at any given time.  Just as a light emitting arclamp emits a wide spectrum of light, the arclamp streamer purports to offer stream readers and writers across a wide spectrum of representations.
+Arclamp is a JavaScript library for streaming data; that is, a set of independent small tools for taking structured data and operating or inspecting it in a streaming and event based fashion. This will typically take the form of serialization, deserialization, and format conversion functions supporting a particular streaming format. 
 
 The primary representations targetted for the current version of Arclamp are:
-* in memory JSON
-* XML (via the [JsonML](http://jsonml.org) derived Q-JsonML format)
-* on disk
+* JsonContentHandler[1], streaming JavaScript objects & JSON.
+* XmlContentHandler SAX, streaming XML.
+* On disk 'Caminus' storage format.
 
-Additionally, Arclamp supports diffing via Rob Sayre's [json-sync](http://github.com/sayrer/json-sync), which outputs differences between objects in JSON format.
+[1] content transfered through JSON.simple's SAX-inspired [ContentHandler](http://code.google.com/p/json-simple/source/browse/trunk/src/org/json/simple/parser/ContentHandler.java) interface.
+[2] through SAX's [ContentHandler](http://www.saxproject.org/apidoc/org/xml/sax/ContentHandler.html).
+
+# Future Plans #
+
+Additionally, Arclamp will support:
+
+* diffing via Rob Sayre's [json-sync](http://github.com/sayrer/json-sync), which outputs differences between objects in JSON format.
 
