@@ -1,23 +1,33 @@
 var pieces = {
-	qjsonmlReader: ["export","qjsonml/qjsonmlReader","QJsonMLReader")],
-	qjsonmlPrinter: ["export","qjsonml/qjsonmlStreamPrinter","QJsonMLStreamPrinter"],
-	qjsonmlWriter: ["export","qjsonml/qjsonmlWriter","QJSONMLWriter"],
-	jsoPrinter: ["export", "jso/jsoPrinter", "JsoPrinter"],
-	complexNs: ["vresource", "complex-ns"],
-	complexNsXml: ["resource", "complex-ns.xml"],
-	nsMap: ["resource", "ns-map"]
+	qjsonmlReader: ["require","arclamp/qjsonml/qjsonmlReader","QJsonMLReader")],
+	qjsonmlPrinter: ["require","arclamp/qjsonml/qjsonmlStreamPrinter","QJsonMLStreamPrinter"],
+	qjsonmlWriter: ["require","arclamp/qjsonml/qjsonmlWriter","QJSONMLWriter"],
+	jsoPrinter: ["require", "arclamp/jso/jsoPrinter", "JsoPrinter"],
+	vresource: ["catfile",["cons","$1",".","$2",["unless",["not","$3"],["cons",".","$3"]]]],
+	complexNs: ["catfile",["cons","complex-ns.","$1"]],
+	complexNsXml: ["catfile", "complex-ns.xml"],
+	complexNsXml2: ["vresource","complex-ns","xml"],
+	saxParser: ["require","sax","SaxParser","$1"],
+	complexNsXmlSax: ["saxParser","complexNsXml"]
+	nsMap: ["catfile", "ns-map",["cons","ns-map.","$1",".json"]],
+	nsMap2: ["vresource", "ns-map", "$1", "json"],
 	nsMapA: ["nsMap","a"],
+	nsMapA2: ["nsMap2","a"]
 }
 
 var qjsonml_pipes = {
 
 	// optional hash to hold additional contexts/pieces
-	round_trip_1: ["pipe", {}, "complexNsXml", ["qjsonmlReader", "nsMapA", "qjsonmlWriter"], "jsoPrinter", ["complexNs", "json"]],
+	round_trip_1: ["pipe", {}, "complexNsXml", ["qjsonmlReader", "nsMapA", "qjsonmlWriter"], "jsoPrinter", ["assert","complexNs", "json"]],
 
-	reader_1_a: ["pipe", "complexNsXml", ["qjsonmlWriter", null, "qjsonmlPrinter"], ["complexNs","qjsonml"]],
-	reader_1_b: ["pipe", "complexNsXml", ["qjsonmlWriter", null, "qjsonmlPrinter"], ["resource", "complex-ns.qjsonml"]],
-	reader_1_c: ["pipe", "complexNsXml", ["qjsonmlWriter", null, ["export", "qjsonml/qjsonmlStreamPrinter", "QJsonMLStreamPrinter"], ["complexNs","qjsonml"]],
-	reader_1_d: ["pipe", ["complexNs","xml"], ["qjsonmlReader", null, "qjsonmlPrinter"], ["complexNs","qjsonml"]]
+	reader_1: ["pipe", "complexNsXmlSax", ["qjsonmlWriter", null, "qjsonmlPrinter"], ["complexNs","qjsonml"]],
+}
+
+// associative contexts evaluate by passing args to next operator
+var env_pieces = {
+	foo: {numen: "foo"}
+	bar: [foo,{second: "value"},"env","numen"]],
+	bar2: [foo,{second: "value"},"env","second"]]
 }
 
 /* stdio based input,output,pipe... model
